@@ -25,14 +25,13 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       if @todo.save
+        format.turbo_stream
         format.html { redirect_to todo_url(@todo), notice: "Todo was successfully created." }
-        format.json { render :show, status: :created, location: @todo }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @todo.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end 
 
   # PATCH/PUT /todos/1 or /todos/1.json
   def update
@@ -58,13 +57,14 @@ class TodosController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_todo
-      @todo = Todo.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def todo_params
-      params.require(:todo).permit(:name, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_todo
+    @todo = Todo.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def todo_params
+    params.require(:todo).permit(:name, :status)
+  end
 end
